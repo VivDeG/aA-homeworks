@@ -9,20 +9,20 @@ class LRUCache
   end
 
   def add(el)
-    resize if count == size
+    resize(size*2) if count == size
     # find if el in cache already
     cache << el
   end
 
   def show
-    p cache.reverse
+    p cache
   end
 
   private
   attr_reader :cache, :size
 
-  def resize
-    size *= 2
+  def resize(new_size)
+    size = new_size
     new_cache = Array.new(size)
     until cache.empty?
       new_cache << cache.shift
@@ -37,7 +37,7 @@ if __FILE__ == $PROGRAM_NAME
   johnny_cache.add("I walk the line")
   johnny_cache.add(5)
 
-  johnny_cache.count # => returns 2
+  p johnny_cache.count # => returns 2
 
   johnny_cache.add([1,2,3])
   johnny_cache.add(5)

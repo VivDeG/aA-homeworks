@@ -1,0 +1,8 @@
+  [1m[35m (3.9ms)[0m  [1m[35mCREATE DATABASE "project_name_development" ENCODING = 'utf8'[0m
+  ↳ bin/rails:9
+  [1m[35m (389.2ms)[0m  [1m[35mCREATE DATABASE "db/test" ENCODING = 'utf8'[0m
+  ↳ bin/rails:9
+  [1m[35m (423.0ms)[0m  [1m[35mCREATE DATABASE "project_name_development" ENCODING = 'utf8'[0m
+  ↳ bin/rails:9
+  [1m[35m (403.8ms)[0m  [1m[35mCREATE DATABASE "test" ENCODING = 'utf8'[0m
+  ↳ bin/rails:9

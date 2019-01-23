@@ -20,9 +20,32 @@ class Play
   end
 
   def self.find_by_title(title)
+    plays = PlayDBConnection.instance.execute(<<-SQL, title)
+      SELECT
+        *
+      FROM
+        plays
+      WHERE
+        title = ?
+    SQL
+
+    Play.new(play.first)
   end
 
   def self.find_by_playwright(name)
+    playwright = Playwright.find_by_name(name)
+    plays = PlayDBConnection.instance.execute(<<-SQL, playwright.id)
+      SELECT
+        *
+      FROM
+        plays
+      WHERE
+        playwright_id = ?
+    SQL
+
+    result = []
+    plays.each { |play| reault << Play.new(play) }
+    result
   end
 
   def initialize(options)
@@ -57,12 +80,24 @@ class Play
 end
 
 class Playwright
+  attr_accessor :id, :name, :birth_year
+
   def self.all
     data = PlayDBConnection.instance.execute("SELECT * FROM playwrights")
     data.map { |datum| Playwright.new(datum) }
   end
 
   def self.find_by_name(name)
+    playwright = PlayDBConnection.instance.execute(<<-SQL, name)
+      SELECT
+        *
+      FROM
+        playwrights
+      WHERE
+        name = ?
+    SQL
+
+    Playwright.new(playwright.first)
   end
 
   def initialize(options)
@@ -72,11 +107,39 @@ class Playwright
   end
 
   def create
+    PlayDBConnection.instance.execute(<<-SQL, name, birth_year)
+      INSERT INTO
+        playwrights (name, birth_year)
+      VALUES
+        (?, ?)
+    SQL
+
+    id = PlayDBConnection.instance.last_insert_row_id
   end
 
   def update
+    PlayDBConnection.instance.execute(<<-SQL, name, birth_year, id)
+      UPDATE
+        playwrights
+      SET
+        name = ?, birth_year = ?
+      WHERE
+        id = ?
+    SQL
   end
 
   def get_plays
+    plays = PlayDBConnection.instance.execute(<<-SQL, id)
+      SELECT
+        *
+      FROM
+        plays
+      WHERE
+        playwright_id = ?
+    SQL
+
+    result = []
+    plays.each { |play| reault << Play.new(play) }
+    result
   end
 end
